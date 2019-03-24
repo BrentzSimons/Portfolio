@@ -1,7 +1,7 @@
 #include "AI.h"
 
-int NEGATIVE_INFINITY = 2147483647;
-int POSITIVE_INFINITY = -2147483648;
+int NEGATIVE_INFINITY = -2147483648;
+int POSITIVE_INFINITY = 2147483647;
 
 int AI_getRandomMove(Graph* board) {
   int move = rand() % board->cols;
@@ -39,7 +39,11 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
   Score_Column bestMove;
   if (depth == 0 || Graph_checkForWin(board) != 0) {
     board->colCounter[move]++;
-    bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer);
+    if (maximizingPlayer)
+      bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer);
+    else
+      bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer) * -1;
+    // wprintf(L"Move %d Score %d Counter %d\t\t", move+1, bestMove.score, board->colCounter[move]+1);
     board->colCounter[move]--;
     return bestMove;
   }
@@ -47,12 +51,15 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
     bestMove.score = NEGATIVE_INFINITY;
     for (int c = 0; c < board->cols; c++) {
       if (board->colCounter[c] >= 0) {
+        // wprintf(L"Column %d\tComputer\t", c);
         Score_Column tmp;
         board->board[board->colCounter[c]][c] = 0x25CB;
-        board->colCounter[move]--;
+        board->colCounter[c]--;
         tmp = AI_minimax(board, depth-1, false, c);
+        // wprintf(L"%d %d \t\t", tmp.score, bestMove.score);
+        board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
-        board->colCounter[move]++;
+        // wprintf(L"Column %d Computer Counter %d\t", c, board->colCounter[c]);
 
         if (tmp.score > bestMove.score) {
           bestMove.score = tmp.score;
@@ -68,10 +75,12 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
         Score_Column tmp;
         bestMove.col = c;
         board->board[board->colCounter[c]][c] = 0x25CF;
-        board->colCounter[move]--;
+        board->colCounter[c]--;
         tmp = AI_minimax(board, depth-1, true, c);
+        // wprintf(L"Move %d score %d best score %d \t\t", c, tmp.score, bestMove.score);
+        board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
-        board->colCounter[move]++;
+        // wprintf(L"Column %d Player Counter %d\t", c, board->colCounter[c]);
 
         if (tmp.score < bestMove.score) {
           bestMove.score = tmp.score;
@@ -108,7 +117,7 @@ int AI_calcMoveScore(Graph* board, int move, bool turn) {
   score += AI_getScoreDiagonalDown(board, move, lowerCol, upperCol, lowerRow, upperRow, currPlayer, oppPlayer);
 
   // Checks to see if the opposite player is one move away from winning
-  board->board[board->colCounter[move]][move] = 0x25CF;
+  board->board[board->colCounter[move]][move] = oppPlayer;
   if (Graph_checkForWin(board) == 1) {
     score += 300;
   }
