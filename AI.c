@@ -31,7 +31,8 @@ int AI_getMove(Graph* board) {
 }
 
 int AI_getBestMove(Graph* board) {
-  Score_Column bestMove = AI_minimax(board, 1, true, 0);
+  Score_Column bestMove = AI_minimax(board, 7, true, 0);
+  wprintf(L"Score = %d", bestMove.score);
   return bestMove.col;
 }
 
@@ -40,10 +41,9 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
   if (depth == 0 || Graph_checkForWin(board) != 0) {
     board->colCounter[move]++;
     if (maximizingPlayer)
-      bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer);
-    else
       bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer) * -1;
-    // wprintf(L"Move %d Score %d Counter %d\t\t", move+1, bestMove.score, board->colCounter[move]+1);
+    else
+      bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer);
     board->colCounter[move]--;
     return bestMove;
   }
@@ -51,15 +51,12 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
     bestMove.score = NEGATIVE_INFINITY;
     for (int c = 0; c < board->cols; c++) {
       if (board->colCounter[c] >= 0) {
-        // wprintf(L"Column %d\tComputer\t", c);
         Score_Column tmp;
         board->board[board->colCounter[c]][c] = 0x25CB;
         board->colCounter[c]--;
         tmp = AI_minimax(board, depth-1, false, c);
-        // wprintf(L"%d %d \t\t", tmp.score, bestMove.score);
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
-        // wprintf(L"Column %d Computer Counter %d\t", c, board->colCounter[c]);
 
         if (tmp.score > bestMove.score) {
           bestMove.score = tmp.score;
@@ -77,10 +74,8 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
         board->board[board->colCounter[c]][c] = 0x25CF;
         board->colCounter[c]--;
         tmp = AI_minimax(board, depth-1, true, c);
-        // wprintf(L"Move %d score %d best score %d \t\t", c, tmp.score, bestMove.score);
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
-        // wprintf(L"Column %d Player Counter %d\t", c, board->colCounter[c]);
 
         if (tmp.score < bestMove.score) {
           bestMove.score = tmp.score;
@@ -178,7 +173,7 @@ int AI_getScoreHorizontal(Graph* board, int move, int lowerCol, int upperCol, in
         score += 20;
         break;
       case 4:
-        score += 1000;
+        score += 1000000;
         break;
     }
   }
@@ -236,7 +231,7 @@ int AI_getScoreVertical(Graph* board, int move, int lowerCol, int upperCol, int 
         score += 20;
         break;
       case 4:
-        score += 1000;
+        score += 1000000;
         break;
     }
   }
@@ -318,7 +313,7 @@ int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, in
           score += 20;
           break;
         case 4:
-          score += 1000;
+          score += 1000000;
           break;
       }
     }
@@ -402,7 +397,7 @@ int AI_getScoreDiagonalDown(Graph* board, int move, int lowerCol, int upperCol, 
           score += 20;
           break;
         case 4:
-          score += 1000;
+          score += 1000000;
           break;
       }
     }
