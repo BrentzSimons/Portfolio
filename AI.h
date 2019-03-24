@@ -11,7 +11,7 @@ typedef struct score_column {
 int AI_getRandomMove(Graph*);
 int AI_getMove(Graph*);
 int AI_getBestMove(Graph*);
-Score_Column AI_minimax(Graph*, int, bool, int);
+Score_Column AI_minimax(Graph*, int, bool, int, int, int);
 int AI_calcMoveScore(Graph*, int, bool);
 int AI_getScoreHorizontal(Graph*, int, int, int, int, int, wchar_t, wchar_t);
 int AI_getScoreVertical(Graph*, int, int, int, int, int, wchar_t, wchar_t);

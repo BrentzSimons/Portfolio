@@ -31,12 +31,11 @@ int AI_getMove(Graph* board) {
 }
 
 int AI_getBestMove(Graph* board) {
-  Score_Column bestMove = AI_minimax(board, 7, true, 0);
-  wprintf(L"Score = %d", bestMove.score);
+  Score_Column bestMove = AI_minimax(board, 7, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
   return bestMove.col;
 }
 
-Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move) {
+Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move, int alpha, int beta) {
   Score_Column bestMove;
   if (depth == 0 || Graph_checkForWin(board) != 0) {
     board->colCounter[move]++;
@@ -54,7 +53,7 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
         Score_Column tmp;
         board->board[board->colCounter[c]][c] = 0x25CB;
         board->colCounter[c]--;
-        tmp = AI_minimax(board, depth-1, false, c);
+        tmp = AI_minimax(board, depth-1, false, c, alpha, beta);
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
 
@@ -62,6 +61,11 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
           bestMove.score = tmp.score;
           bestMove.col = c;
         }
+
+        if (bestMove.score > alpha)
+          alpha = bestMove.score;
+        if (alpha >= beta)
+          break;
       }
     }
     return bestMove;
@@ -73,7 +77,7 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
         bestMove.col = c;
         board->board[board->colCounter[c]][c] = 0x25CF;
         board->colCounter[c]--;
-        tmp = AI_minimax(board, depth-1, true, c);
+        tmp = AI_minimax(board, depth-1, true, c, alpha, beta);
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
 
@@ -81,6 +85,11 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
           bestMove.score = tmp.score;
           bestMove.col = c;
         }
+
+        if (bestMove.score < beta)
+          beta = bestMove.score;
+        if (alpha >= beta)
+          break;
       }
     }
     return bestMove;
