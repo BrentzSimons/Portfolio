@@ -39,18 +39,19 @@ void Graph_print(Graph* self) {
   printf("\n");
   for (int r = 0; r < self->rows + 1; r++) {
     if (r != self->rows) {
-      wprintf(L"\t\t");
-      wprintf(L"%d ", r + 1);
       wprintf(L"|");
     } else {
-      wprintf(L"\t\t   ");
+      wprintf(L" ");
     }
     for (int c = 0; c < self->cols; c++) {
       if (r == self->rows) {
-        wprintf(L"%d ", c + 1);
+        if (c < 9)
+          wprintf(L"%d  ", c + 1);
+        else
+          wprintf(L"%d ", c + 1);
       } else {
         wprintf(L"%lc", self->board[r][c]);
-        wprintf(L"|");
+        wprintf(L" |");
       }
     }
     wprintf(L"\n");

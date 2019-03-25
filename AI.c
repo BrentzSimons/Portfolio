@@ -182,7 +182,7 @@ int AI_getScoreHorizontal(Graph* board, int move, int lowerCol, int upperCol, in
         score += 20;
         break;
       case 4:
-        score += 1000000;
+        score += 1000000000;
         break;
     }
   }
@@ -240,7 +240,7 @@ int AI_getScoreVertical(Graph* board, int move, int lowerCol, int upperCol, int 
         score += 20;
         break;
       case 4:
-        score += 1000000;
+        score += 1000000000;
         break;
     }
   }
@@ -322,7 +322,7 @@ int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, in
           score += 20;
           break;
         case 4:
-          score += 1000000;
+          score += 1000000000;
           break;
       }
     }
@@ -406,7 +406,7 @@ int AI_getScoreDiagonalDown(Graph* board, int move, int lowerCol, int upperCol, 
           score += 20;
           break;
         case 4:
-          score += 1000000;
+          score += 1000000000;
           break;
       }
     }
