@@ -83,7 +83,7 @@ int UI_playAgain() {
   return input;
 }
 
-void UI_printClosingScreen(int numRedWins, int numBlackWins) {
+void UI_printClosingScreen(int numRedWins, int numBlackWins, int numTieGames) {
   system("clear");
   wprintf(L"\nThank you for playing!\n\n");
   if (numRedWins == 1)
@@ -95,6 +95,11 @@ void UI_printClosingScreen(int numRedWins, int numBlackWins) {
     wprintf(L"Black won 1 time\n");
   else
     wprintf(L"Black won %d times\n", numBlackWins);
+
+  if (numTieGames == 1)
+    wprintf(L"There was 1 tie game\n");
+  else
+    wprintf(L"There were %d tie games\n", numTieGames);
 
   wprintf(L"\n");
 

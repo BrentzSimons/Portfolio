@@ -10,6 +10,6 @@ int UI_getGamemode();
 int UI_getDifficulty();
 void UI_printWin(wchar_t);
 int UI_playAgain();
-void UI_printClosingScreen(int, int);
+void UI_printClosingScreen(int, int, int);
 void UI_printErrorColumnFull();
 void UI_printErrorMoveOutOfBounds(int);

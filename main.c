@@ -17,7 +17,7 @@ int main(void) {
   const wchar_t PLAYER_WHITE = 0x25CF, PLAYER_BLACK = 0x25CB;
   Graph *board = Graph_create(UI_getRows(), UI_getCols());
   int move, win;
-  int numWhiteWins = 0, numBlackWins = 0;
+  int numWhiteWins = 0, numBlackWins = 0, numTieGames = 0;
 
   if (UI_getGamemode() == 1) {
     gamemode = true;
@@ -67,6 +67,7 @@ int main(void) {
     if (win) {
       if (win == 2) {
         UI_printWin('t');
+        numTieGames++;
       } else {
         if (turn) {
           UI_printWin(PLAYER_WHITE);
@@ -87,7 +88,7 @@ int main(void) {
     turn = !turn;
   }
 
-  UI_printClosingScreen(numWhiteWins, numBlackWins);
+  UI_printClosingScreen(numWhiteWins, numBlackWins, numTieGames);
 
   return 0;
 }
