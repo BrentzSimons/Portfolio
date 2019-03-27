@@ -31,7 +31,20 @@ int AI_getMove(Graph* board) {
 }
 
 int AI_getBestMove(Graph* board) {
-  Score_Column bestMove = AI_minimax(board, 7, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+  Score_Column bestMove;
+  if (board->cols < 20)
+    bestMove = AI_minimax(board, 7, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+  else if (board->cols < 40)
+    bestMove = AI_minimax(board, 6, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+  else if (board->cols < 55)
+    bestMove = AI_minimax(board, 5, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+  else if (board->cols < 100)
+    bestMove = AI_minimax(board, 4, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+  // else if (board->cols < 1)
+  //   bestMove = AI_minimax(board, 3, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+  else
+    bestMove = AI_minimax(board, 2, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+
   return bestMove.col;
 }
 
@@ -123,7 +136,7 @@ int AI_calcMoveScore(Graph* board, int move, bool turn) {
   // Checks to see if the opposite player is one move away from winning
   board->board[board->colCounter[move]][move] = oppPlayer;
   if (Graph_checkForWin(board) == 1) {
-    score += 300;
+    score += 1000;
   }
 
   if (move == board->cols/2) {
