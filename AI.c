@@ -31,6 +31,7 @@ int AI_getMove(Graph* board) {
 }
 
 int AI_getBestMove(Graph* board) {
+  // wprintf(L"Hello\n");
   Score_Column bestMove;
   if (board->cols < 20)
     bestMove = AI_minimax(board, 7, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
@@ -50,7 +51,9 @@ int AI_getBestMove(Graph* board) {
 
 Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move, int alpha, int beta) {
   Score_Column bestMove;
-  if (depth == 0 || Graph_checkForWin(board) != 0) {
+  // wprintf(L"1\n");
+  if (depth == 0 || Graph_checkForWin(board, move) != 0) {
+    // wprintf(L"2\n");
     board->colCounter[move]++;
     if (maximizingPlayer)
       bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer) * -1;
@@ -59,14 +62,19 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
     board->colCounter[move]--;
     return bestMove;
   }
+  // wprintf(L"1.1\n");
   if (maximizingPlayer) {
+    // wprintf(L"3\n");
     bestMove.score = NEGATIVE_INFINITY;
     for (int c = 0; c < board->cols; c++) {
       if (board->colCounter[c] >= 0) {
         Score_Column tmp;
+        // wprintf(L"4\n");
         board->board[board->colCounter[c]][c] = 0x25CB;
         board->colCounter[c]--;
+        // wprintf(L"5\n");
         tmp = AI_minimax(board, depth-1, false, c, alpha, beta);
+        // wprintf(L"6\n");
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
 
@@ -135,9 +143,10 @@ int AI_calcMoveScore(Graph* board, int move, bool turn) {
 
   // Checks to see if the opposite player is one move away from winning
   board->board[board->colCounter[move]][move] = oppPlayer;
-  if (Graph_checkForWin(board) == 1) {
+  board->colCounter[move]--;
+  if (Graph_checkForWin(board, move) == 1)
     score += 1000;
-  }
+  board->colCounter[move]++;
 
   if (move == board->cols/2) {
     score += 2;
@@ -181,7 +190,7 @@ int AI_getScoreHorizontal(Graph* board, int move, int lowerCol, int upperCol, in
       case 3:
         if (board->board[r][c+3] == currPlayer) {
           count++;
-        } else if (board->board[r][c+2] == oppPlayer) {
+        } else if (board->board[r][c+3] == oppPlayer) {
           count = 0;
           break;
         }
@@ -224,21 +233,21 @@ int AI_getScoreVertical(Graph* board, int move, int lowerCol, int upperCol, int 
       case 1:
         if (board->board[r+1][c] == currPlayer) {
           count++;
-        } else if (board->board[r][c] == oppPlayer) {
+        } else if (board->board[r+1][c] == oppPlayer) {
           count = 0;
           break;
         }
       case 2:
         if (board->board[r+2][c] == currPlayer) {
           count++;
-        } else if (board->board[r][c] == oppPlayer) {
+        } else if (board->board[r+2][c] == oppPlayer) {
           count = 0;
           break;
         }
       case 3:
         if (board->board[r+3][c] == currPlayer) {
           count++;
-        } else if (board->board[r][c] == oppPlayer) {
+        } else if (board->board[r+3][c] == oppPlayer) {
           count = 0;
           break;
         }

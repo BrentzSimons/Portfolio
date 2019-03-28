@@ -14,6 +14,6 @@ Graph* Graph_create(int, int);
 Graph* Graph_reset(Graph*);
 void Graph_print(Graph*);
 Graph* Graph_insertDisc(Graph*, int, wchar_t);
-int Graph_checkForWin(Graph*);
+int Graph_checkForWin(Graph*, int);
 int Graph_getCols(Graph*);
 int Graph_getColCounter(Graph*, int);

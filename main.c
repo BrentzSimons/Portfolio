@@ -62,8 +62,8 @@ int main(void) {
     else
       board = Graph_insertDisc(board, move, PLAYER_BLACK);
 
-    win = Graph_checkForWin(board);
     Graph_print(board);
+    win = Graph_checkForWin(board, move);
     if (win) {
       if (win == 2) {
         UI_printWin('t');
