@@ -68,12 +68,19 @@ Graph* Graph_insertDisc(Graph* self, int move, wchar_t player) {
 }
 
 int Graph_checkForWin(Graph* self) {
-  int count = 0;
+  int heighestRow = self->cols;
+
+  // Checks for a tie game
+  bool tieGame = true;
   for (int i = 0; i < self->cols; i++) {
-    if (self->colCounter[i] < 0) count++;
+    if (self->colCounter[i] >= 0) tieGame = false;
+    if (self->colCounter[i] < heighestRow) heighestRow = self->colCounter[i];
   }
-  if (count == self->cols) return 2;
-  for (int r = 0; r < self->rows-3; r++) {
+  if (tieGame) return 2;
+  heighestRow++;
+  //wprintf(L"heighestRow = %d\t\t", heighestRow);
+
+  for (int r = heighestRow; r < self->rows-3; r++) {
     for (int c = 0; c < self->cols-3; c++) {
       if (self->board[r][c] != ' ') {
         if ((self->board[r][c] == self->board[r+1][c+1]) && (self->board[r+1][c+1] == self->board[r+2][c+2]) && (self->board[r+2][c+2] == self->board[r+3][c+3]))
@@ -83,7 +90,7 @@ int Graph_checkForWin(Graph* self) {
   }
 
   //checking up diagonal
-  for (int r = 3; r < self->rows; r++) {
+  for (int r = heighestRow+3; r < self->rows; r++) {
     for (int c = 0; c < self->cols-3; c++) {
       if (self->board[r][c] != ' ') {
         if ((self->board[r][c] == self->board[r-1][c+1]) && (self->board[r-1][c+1] == self->board[r-2][c+2]) && (self->board[r-2][c+2] == self->board[r-3][c+3]))
@@ -93,7 +100,7 @@ int Graph_checkForWin(Graph* self) {
   }
 
   //checking horizontal
-  for (int r = 0; r < self->rows; r++) {
+  for (int r = heighestRow; r < self->rows; r++) {
     for (int c = 0; c < self->cols-3; c++) {
       if (self->board[r][c] != ' ') {
         if ((self->board[r][c] == self->board[r][c+1]) && (self->board[r][c+1] == self->board[r][c+2]) && (self->board[r][c+2] == self->board[r][c+3]))
@@ -103,7 +110,7 @@ int Graph_checkForWin(Graph* self) {
   }
 
   //checking vertical
-  for (int r = 0; r < self->rows-3; r++) {
+  for (int r = heighestRow; r < self->rows-3; r++) {
     for (int c = 0; c < self->cols; c++) {
       if (self->board[r][c] != ' ') {
         if ((self->board[r][c] == self->board[r+1][c]) && (self->board[r+1][c] == self->board[r+2][c]) && (self->board[r+2][c] == self->board[r+3][c]))
