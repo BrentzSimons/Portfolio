@@ -34,26 +34,24 @@ int AI_getBestMove(Graph* board) {
   // wprintf(L"Hello\n");
   Score_Column bestMove;
   if (board->cols < 20)
-    bestMove = AI_minimax(board, 7, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+    bestMove = AI_minimax(board, 7, true, -1, NEGATIVE_INFINITY, POSITIVE_INFINITY);
   else if (board->cols < 40)
-    bestMove = AI_minimax(board, 6, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+    bestMove = AI_minimax(board, 6, true, -1, NEGATIVE_INFINITY, POSITIVE_INFINITY);
   else if (board->cols < 55)
-    bestMove = AI_minimax(board, 5, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+    bestMove = AI_minimax(board, 5, true, -1, NEGATIVE_INFINITY, POSITIVE_INFINITY);
   else if (board->cols < 100)
-    bestMove = AI_minimax(board, 4, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+    bestMove = AI_minimax(board, 4, true, -1, NEGATIVE_INFINITY, POSITIVE_INFINITY);
   // else if (board->cols < 1)
   //   bestMove = AI_minimax(board, 3, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
   else
-    bestMove = AI_minimax(board, 2, true, 0, NEGATIVE_INFINITY, POSITIVE_INFINITY);
+    bestMove = AI_minimax(board, 2, true, -1, NEGATIVE_INFINITY, POSITIVE_INFINITY);
 
   return bestMove.col;
 }
 
 Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move, int alpha, int beta) {
   Score_Column bestMove;
-  // wprintf(L"1\n");
-  if (depth == 0 || Graph_checkForWin(board, move) != 0) {
-    // wprintf(L"2\n");
+  if (move != -1 && (depth == 0 || Graph_checkForWin(board, move) != 0)) {
     board->colCounter[move]++;
     if (maximizingPlayer)
       bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer) * -1;
@@ -62,19 +60,14 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
     board->colCounter[move]--;
     return bestMove;
   }
-  // wprintf(L"1.1\n");
   if (maximizingPlayer) {
-    // wprintf(L"3\n");
     bestMove.score = NEGATIVE_INFINITY;
     for (int c = 0; c < board->cols; c++) {
       if (board->colCounter[c] >= 0) {
         Score_Column tmp;
-        // wprintf(L"4\n");
         board->board[board->colCounter[c]][c] = 0x25CB;
         board->colCounter[c]--;
-        // wprintf(L"5\n");
         tmp = AI_minimax(board, depth-1, false, c, alpha, beta);
-        // wprintf(L"6\n");
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
 
@@ -348,6 +341,7 @@ int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, in
           break;
       }
     }
+    free(window);
   }
 
   return score;
@@ -432,6 +426,7 @@ int AI_getScoreDiagonalDown(Graph* board, int move, int lowerCol, int upperCol, 
           break;
       }
     }
+    free(window);
   }
 
   return score;
