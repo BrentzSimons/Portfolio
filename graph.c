@@ -23,6 +23,15 @@ Graph* Graph_create(int r, int c) {
   return tmp;
 }
 
+void Graph_delete(Graph* board) {
+  for (int i = 0; i < board->rows; i++) {
+    free(board->board[i]);
+  }
+  free(board->board);
+  free(board->colCounter);
+  free(board);
+}
+
 Graph* Graph_reset(Graph* board) {
   for (int r = 0; r < board->rows; r++) {
     for (int c = 0; c < board->cols; c++) {

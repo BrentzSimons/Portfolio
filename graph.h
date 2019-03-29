@@ -11,6 +11,7 @@ typedef struct graph {
 } Graph;
 
 Graph* Graph_create(int, int);
+void Graph_delete(Graph*); 
 Graph* Graph_reset(Graph*);
 void Graph_print(Graph*);
 Graph* Graph_insertDisc(Graph*, int, wchar_t);

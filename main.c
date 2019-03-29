@@ -25,10 +25,6 @@ int main(void) {
     gamemode = false;
     difficulty = UI_getDifficulty();
   }
-  // while (difficulty == 3) {
-  //   printf("I'm sorry. Hard mode isn't implemented yet. Please pick another option: ");
-  //   difficulty = UI_getDifficulty();
-  // }
 
   Graph_print(board);
 
@@ -88,6 +84,7 @@ int main(void) {
     turn = !turn;
   }
 
+  Graph_delete(board);
   UI_printClosingScreen(numWhiteWins, numBlackWins, numTieGames);
 
   return 0;

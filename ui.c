@@ -22,8 +22,8 @@ int UI_getMove(bool turn) {
 int UI_getRows() {
   wprintf(L"Please enter how many rows you want: ");
   int rows;
-  while(scanf("%d", &rows) != 1) {
-      wprintf(L"Please only enter an integer: ");
+  while(scanf("%d", &rows) != 1 || rows <= 0) {
+      wprintf(L"Please only enter a positive integer: ");
       while(getchar() != '\n');
   }
   return rows;
@@ -32,8 +32,8 @@ int UI_getRows() {
 int UI_getCols() {
   wprintf(L"Please enter how many columns you want: ");
   int cols;
-  while(scanf("%d", &cols) != 1) {
-      wprintf(L"Please only enter an integer: ");
+  while((scanf("%d", &cols) != 1) || (cols <= 0)) {
+      wprintf(L"Please only enter a positive integer: ");
       while(getchar() != '\n');
   }
   return cols;
