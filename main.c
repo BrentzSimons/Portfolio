@@ -20,16 +20,16 @@ int main(void) {
   int numWhiteWins = 0, numBlackWins = 0, numTieGames = 0;
 
   if (UI_getGamemode() == 1) {
-    gamemode = true;
+    gamemode = true;    // User is playing against another player
   } else {
-    gamemode = false;
+    gamemode = false;   // User is playing against computer
     difficulty = UI_getDifficulty();
   }
 
   Graph_print(board);
 
   while (game) {
-    if (turn || gamemode) {
+    if (turn || gamemode) {   // Checks if it is the users turn or if the game is player vs player
       move = UI_getMove(turn) - 1;
       while (move < 0 || move >= Graph_getCols(board)) {
         UI_printErrorMoveOutOfBounds(Graph_getCols(board));

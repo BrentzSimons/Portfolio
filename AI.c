@@ -3,35 +3,49 @@
 int NEGATIVE_INFINITY = -2147483648;
 int POSITIVE_INFINITY = 2147483647;
 
+// Returns a random number from 0 to the amount of columns minus 1.
+// This is the easy mode for the AI.
+//
+// Parameter: needs the Graph pointer that holds the information of the board.
 int AI_getRandomMove(Graph* board) {
   int move = rand() % board->cols;
-  while (board->colCounter[move] < 0)
+  while (board->colCounter[move] < 0) // Checks if the column is already full
     move = rand() % board->cols;
 
   return move;
 }
 
+// Goes through all of the columns and calculates a score for each, then
+// returns the column with the heighest score.
+// This is the medium mode for the AI.
+//
+// Parameter: needs the Graph pointer that holds the information of the board.
 int AI_getMove(Graph* board) {
   int bestScore = 0;
-  int bestMove = AI_getRandomMove(board);
+  int bestMove = AI_getRandomMove(board);   // Sets the initial best move as random incase all columns have the same score
   for (int c = 0; c < board->cols; c++) {
     int r = board->colCounter[c];
-    if (r >= 0) {
-      board->board[r][c] = 0x25CB;
-      int score = AI_calcMoveScore(board, c, false);
-      if (score > bestScore) {
+    if (r >= 0) {  // Makes sure there is still a possible move in the current column
+      board->board[r][c] = 0x25CB;  // Places black "ghost" piece into column
+      int score = AI_calcMoveScore(board, c, false); // Calculates score for current column
+      if (score > bestScore) {  // Keeps track of the max score and its respective column
         bestScore = score;
         bestMove = c;
       }
-      board->board[r][c] = ' ';
+      board->board[r][c] = ' ';   // Removes the "ghost" piece.
     }
   }
   printf("\n");
   return bestMove;
 }
 
+// Calls the minimax algorithm to get the best move. Changes the depth for minimax based on
+// the amount of columns in the board to lower runtime on bigger boards, but get better
+// results on smaller boards.
+// This is the hard mode for the AI.
+//
+// Parameter: needs the Graph pointer that holds the information of the board.
 int AI_getBestMove(Graph* board) {
-  // wprintf(L"Hello\n");
   Score_Column bestMove;
   if (board->cols < 20)
     bestMove = AI_minimax(board, 7, true, -1, NEGATIVE_INFINITY, POSITIVE_INFINITY);
@@ -49,6 +63,12 @@ int AI_getBestMove(Graph* board) {
   return bestMove.col;
 }
 
+// Uses the minimax algorithm with alpha-beta pruning to recursively go through all of the possible moves
+// and calculates a score.The stop condition happens when the depth reaches 0 or if there is a win.
+//
+// Parameters: needs the Graph pointer that holds the information of the board.
+// A positive integer for the depth. A boolean that keeps track if you are on the player
+// that was the max score. A integer 
 Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move, int alpha, int beta) {
   Score_Column bestMove;
   if (move != -1 && (depth == 0 || Graph_checkForWin(board, move) != 0)) {
