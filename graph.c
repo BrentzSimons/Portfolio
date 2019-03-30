@@ -6,6 +6,8 @@ struct Graph {
   int *colCounter;
 };
 
+// Creates the Graph struct and crates the board with r rows and c columns.
+// Fills the board with spaces and sets the column counter to r-1.
 Graph* Graph_create(int r, int c) {
   Graph *tmp = malloc(sizeof(Graph));
   tmp->rows = r;
@@ -23,6 +25,7 @@ Graph* Graph_create(int r, int c) {
   return tmp;
 }
 
+// Frees up all memory that was allocated when creating the Graph struct.
 void Graph_delete(Graph* board) {
   for (int i = 0; i < board->rows; i++) {
     free(board->board[i]);
@@ -32,6 +35,7 @@ void Graph_delete(Graph* board) {
   free(board);
 }
 
+// Resets the board to original clean state.
 Graph* Graph_reset(Graph* board) {
   for (int r = 0; r < board->rows; r++) {
     for (int c = 0; c < board->cols; c++) {
@@ -43,6 +47,7 @@ Graph* Graph_reset(Graph* board) {
   return board;
 }
 
+// Prints out the board.
 void Graph_print(Graph* board) {
   system("clear");
   printf("\n");
@@ -70,16 +75,16 @@ void Graph_print(Graph* board) {
   return;
 }
 
+// Inserts "player" disc into the board at column "move"
 Graph* Graph_insertDisc(Graph* board, int move, wchar_t player) {
   board->board[board->colCounter[move]][move] = player;
   board->colCounter[move]--;
   return board;
 }
 
+// Checks if "move" creates a win. Only checks win conditions that include "move".
 int Graph_checkForWin(Graph* board, int move) {
-  // wprintf(L"%d, %d\n", board->colCounter[move], move);
   if (board->colCounter[move] == 5) return 0;
-  // int heighestRow = board->cols;
 
   // Checks for a tie game
   bool tieGame = true;
@@ -88,12 +93,10 @@ int Graph_checkForWin(Graph* board, int move) {
       tieGame = false;
       break;
     }
-    // if (board->colCounter[i] < heighestRow) heighestRow = board->colCounter[i];
   }
   if (tieGame) return 2;
-  // heighestRow++;
-  //wprintf(L"heighestRow = %d\t\t", heighestRow);
 
+  // Calculates the lower/upper column/row from the move
   int lowerCol = move-3, upperCol = move+3;
   int upperRow = board->colCounter[move]-2, lowerRow = board->colCounter[move]+4;
   if (lowerCol < 0) lowerCol = 0;
@@ -143,12 +146,12 @@ int Graph_checkForWin(Graph* board, int move) {
   int size = end-start+1;   // Calculates how many elements are in the window
   if (size > 3) {
     wchar_t *window = malloc(size * sizeof(wchar_t));
-    // Fills the window with the correct elements on the board
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; i++) { // Fills the window with the correct elements from the board
       window[i] = board->board[(board->colCounter[move]+1)-start+move-i][start+i];
     }
-    // Checks through the window in sets of 4 to find common discs.
-    for (int i = 0; i < size-3; i++) {
+
+    for (int i = 0; i < size-3; i++) { // Checks through the window in sets of 4 to find common discs.
       if (window[i] != ' ') {
         if (window[i] == window[i+1] && window[i+1] == window[i+2] && window[i+2] == window[i+3]) {
           free(window);
@@ -182,12 +185,12 @@ int Graph_checkForWin(Graph* board, int move) {
   size = end-start+1;   // Calculates how many elements are in the window
   if (size > 3) {
     wchar_t *window = malloc(size * sizeof(wchar_t));
-    // Fills the window with the correct elements on the board
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; i++) { // Fills the window with the correct elements from the board
       window[i] = board->board[(board->colCounter[move]+1)+start-move+i][start+i];
     }
-    // Checks through the window in sets of 4 to find common discs.
-    for (int i = 0; i < size-3; i++) {
+
+    for (int i = 0; i < size-3; i++) { // Checks through the window in sets of 4 to find common discs.
       if (window[i] != ' ') {
         if (window[i] == window[i+1] && window[i+1] == window[i+2] && window[i+2] == window[i+3]) {
           free(window);

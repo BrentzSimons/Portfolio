@@ -68,34 +68,38 @@ int AI_getBestMove(Graph* board) {
 //
 // Parameters: needs the Graph pointer that holds the information of the board.
 // A positive integer for the depth. A boolean that keeps track if you are on the player
-// that was the max score. A integer 
+// that was the max score. A integer
 Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move, int alpha, int beta) {
   Score_Column bestMove;
+  // If move is -1, minimax was just called from another function and will cause problems if checkForWin is called.
+  // The recursive calls end whenever depth is equal to zero or if there is a win.
   if (move != -1 && (depth == 0 || Graph_checkForWin(board, move) != 0)) {
-    board->colCounter[move]++;
-    if (maximizingPlayer)
+    board->colCounter[move]++; // Adds to the column counter for the current move because of how calcMoveScore is coded.
+    if (maximizingPlayer) // If it is the users turn, get the negative version of the score because AI wants a bad score for the player.
       bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer) * -1;
     else
       bestMove.score = AI_calcMoveScore(board, move, maximizingPlayer);
-    board->colCounter[move]--;
+    board->colCounter[move]--; // Resets the column counter to where it was.
     return bestMove;
   }
+
   if (maximizingPlayer) {
     bestMove.score = NEGATIVE_INFINITY;
     for (int c = 0; c < board->cols; c++) {
       if (board->colCounter[c] >= 0) {
-        Score_Column tmp;
+        Score_Column tmp; // Keeps track of the current Score and its respective column
         board->board[board->colCounter[c]][c] = 0x25CB;
         board->colCounter[c]--;
-        tmp = AI_minimax(board, depth-1, false, c, alpha, beta);
+        tmp = AI_minimax(board, depth-1, false, c, alpha, beta); // Recursively calls minimax
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
 
-        if (tmp.score > bestMove.score) {
+        if (tmp.score > bestMove.score) { // Keeps track of the max score and its respective column
           bestMove.score = tmp.score;
           bestMove.col = c;
         }
 
+        // Alpha-beta pruning
         if (bestMove.score > alpha)
           alpha = bestMove.score;
         if (alpha >= beta)
@@ -107,19 +111,20 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
     bestMove.score = POSITIVE_INFINITY;
     for (int c = 0; c < board->cols; c++) {
       if (board->colCounter[c] >= 0) {
-        Score_Column tmp;
+        Score_Column tmp; // Keeps track of the current Score and its respective column
         bestMove.col = c;
         board->board[board->colCounter[c]][c] = 0x25CF;
         board->colCounter[c]--;
-        tmp = AI_minimax(board, depth-1, true, c, alpha, beta);
+        tmp = AI_minimax(board, depth-1, true, c, alpha, beta); // Recursively calls minimax
         board->colCounter[c]++;
         board->board[board->colCounter[c]][c] = ' ';
 
-        if (tmp.score < bestMove.score) {
+        if (tmp.score < bestMove.score) { // Keeps track of the max score and its respective column
           bestMove.score = tmp.score;
           bestMove.col = c;
         }
 
+        // Alpha-beta pruning
         if (bestMove.score < beta)
           beta = bestMove.score;
         if (alpha >= beta)
@@ -131,6 +136,7 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
 }
 
 int AI_calcMoveScore(Graph* board, int move, bool turn) {
+  // Calculates the lower/upper column/row from the move
   int lowerCol = move-3, upperCol = move+3;
   int upperRow = board->colCounter[move]-3, lowerRow = board->colCounter[move]+3;
   if (lowerCol < 0) lowerCol = 0;
@@ -161,6 +167,7 @@ int AI_calcMoveScore(Graph* board, int move, bool turn) {
     score += 1000;
   board->colCounter[move]++;
 
+  // If the move is the middle of the board, gives it a small score increase.
   if (move == board->cols/2) {
     score += 2;
   }
@@ -210,13 +217,13 @@ int AI_getScoreHorizontal(Graph* board, int move, int lowerCol, int upperCol, in
     }
     //determines how many points to give based on how many discs were found
     switch (count) {
-      case 2:
+      case 2: // Two discs within 4 places
         score += 5;
         break;
-      case 3:
+      case 3: // Three discs within 4 places
         score += 20;
         break;
-      case 4:
+      case 4: // Four discs within 4 places (this is a win)
         score += 1000000000;
         break;
     }
@@ -268,13 +275,13 @@ int AI_getScoreVertical(Graph* board, int move, int lowerCol, int upperCol, int 
 
     //determines how many points to give based on how many discs were found
     switch (count) {
-      case 2:
+      case 2: // Two discs within 4 places
         score += 5;
         break;
-      case 3:
+      case 3: // Three discs within 4 places
         score += 20;
         break;
-      case 4:
+      case 4: // Four discs within 4 places (this is a win)
         score += 1000000000;
         break;
     }
@@ -310,13 +317,13 @@ int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, in
   int size = end-start+1;   // Calculates how many elements are in the window
   if (size > 3) {
     wchar_t *window = malloc(size * sizeof(wchar_t));
-    // Fills the window with the correct elements on the board
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; i++) { // Fills the window with the correct elements from the board
       window[i] = board->board[board->colCounter[move]-start+move-i][start+i];
     }
+
     int count = 0;
-    // Checks through the window in sets of 4 to find common discs.
-    for (int i = 0; i < size-3; i++) {
+    for (int i = 0; i < size-3; i++) { // Checks through the window in sets of 4 to find common discs.
       count = 0;
       switch (0) {
         case 0:
@@ -350,13 +357,13 @@ int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, in
       }
       //determines how many points to give based on how many discs were found
       switch (count) {
-        case 2:
+        case 2: // Two discs within 4 places
           score += 5;
           break;
-        case 3:
+        case 3: // Three discs within 4 places
           score += 20;
           break;
-        case 4:
+        case 4: // Four discs within 4 places (this is a win)
           score += 1000000000;
           break;
       }
@@ -395,13 +402,13 @@ int AI_getScoreDiagonalDown(Graph* board, int move, int lowerCol, int upperCol, 
   int size = end-start+1;   // Calculates how many elements are in the window
   if (size > 3) {
     wchar_t *window = malloc(size * sizeof(wchar_t));
-    // Fills the window with the correct elements on the board
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; i++) { // Fills the window with the correct elements from the board
       window[i] = board->board[board->colCounter[move]+start-move+i][start+i];
     }
+
     int count = 0;
-    // Checks through the window in sets of 4 to find common discs.
-    for (int i = 0; i < size-3; i++) {
+    for (int i = 0; i < size-3; i++) { // Checks through the window in sets of 4 to find common discs.
       count = 0;
       switch (0) {
         case 0:
@@ -435,13 +442,13 @@ int AI_getScoreDiagonalDown(Graph* board, int move, int lowerCol, int upperCol, 
       }
       //determines how many points to give based on how many discs were found
       switch (count) {
-        case 2:
+        case 2: // Two discs within 4 places
           score += 5;
           break;
-        case 3:
+        case 3: // Three discs within 4 places
           score += 20;
           break;
-        case 4:
+        case 4: // Four discs within 4 places (this is a win)
           score += 1000000000;
           break;
       }
