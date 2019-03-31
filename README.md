@@ -1,3 +1,7 @@
+Video Demonstration:
+  https://youtu.be/al8quUOyeUQ
+
+
 Instructions:
 
 Compiling and Running the game:
@@ -21,4 +25,4 @@ Game:
 Code Design:
   -The easy AI mode selects a random column and plays in that column as long as it's not already full.
   -The medium AI mode calculates a score for every column and picks the column with the best score. If all of the columns give the same score, it picks a random column.
-  -The hard AI mode uses the same scoring method as medium, but also uses the minimax with alpha-beta pruning algorithm to look at future moves and finds the best move. In order to keep runtime low, the depth for the minimax decreases (from 7 down to 2) as the amount of columns increase. 
+  -The hard AI mode uses the same scoring method as medium, but also uses the minimax with alpha-beta pruning algorithm to look at future moves and finds the best move. In order to keep runtime low, the depth for the minimax decreases (from 7 down to 2) as the amount of columns increase.
