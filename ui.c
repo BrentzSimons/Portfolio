@@ -19,6 +19,18 @@ int UI_getMove(bool turn) {
   return move;
 }
 
+void UI_printPreviousMove(bool turn, int move) {
+  move++;
+  if (move == 0) return;
+  if (turn) {
+    wprintf(L"Black played in column %d.\n", move);
+  } else {
+    wprintf(L"White played in column %d.\n", move);
+  }
+
+  return;
+}
+
 int UI_getRows() {
   wprintf(L"Please enter how many rows you want: ");
   int rows;

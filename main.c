@@ -16,7 +16,7 @@ int main(void) {
   int difficulty;       // Controls difficulty for AI
   const wchar_t PLAYER_WHITE = 0x25CF, PLAYER_BLACK = 0x25CB;
   Graph *board = Graph_create(UI_getRows(), UI_getCols());
-  int move, win;
+  int move=-1, win;
   int numWhiteWins = 0, numBlackWins = 0, numTieGames = 0;
 
   if (UI_getGamemode()) {
@@ -30,6 +30,7 @@ int main(void) {
 
   while (game) {
     if (turn || gamemode) {   // Checks if it is the users turn or if the game is player vs player
+      UI_printPreviousMove(turn, move);
       move = UI_getMove(turn) - 1;
       while (move < 0 || move >= Graph_getCols(board)) {
         UI_printErrorMoveOutOfBounds(Graph_getCols(board));
@@ -101,6 +102,7 @@ int main(void) {
           }
         }
         win = 0;
+        move = -1;
         board = Graph_reset(board);
         Graph_print(board);
       } else {

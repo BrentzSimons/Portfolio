@@ -4,6 +4,7 @@
 #include <wchar.h>
 
 int UI_getMove(bool);
+void UI_printPreviousMove(bool, int);
 int UI_getRows();
 int UI_getCols();
 int UI_getGamemode();
