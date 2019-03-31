@@ -155,23 +155,27 @@ int UI_promptToResetScore() {
 
 void UI_printClosingScreen(int numRedWins, int numBlackWins, int numTieGames) {
   system("clear");
-  wprintf(L"\nThank you for playing!\n\n");
-  if (numRedWins == 1)
-    wprintf(L"White won 1 time\n");
+  wprintf(L"\nThank you for playing!\n");
+
+  return;
+}
+
+void UI_printGameWins(int numWhiteWins, int numBlackWins, int numTieGames) {
+  wprintf(L"\nScore:\n");
+  if (numWhiteWins == 1)
+    wprintf(L"White - 1 Win\n");
   else
-    wprintf(L"White won %d times\n", numRedWins);
+    wprintf(L"White - %d Wins\n", numWhiteWins);
 
   if (numBlackWins == 1)
-    wprintf(L"Black won 1 time\n");
+    wprintf(L"Black - 1 Win\n");
   else
-    wprintf(L"Black won %d times\n", numBlackWins);
+    wprintf(L"Black - %d Wins\n", numBlackWins);
 
   if (numTieGames == 1)
-    wprintf(L"There was 1 tie game\n");
+    wprintf(L"1 Tie\n");
   else
-    wprintf(L"There were %d tie games\n", numTieGames);
-
-  wprintf(L"\n");
+    wprintf(L"%d Ties\n", numTieGames);
 
   return;
 }

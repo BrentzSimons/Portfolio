@@ -75,6 +75,8 @@ int main(void) {
         }
       }
 
+      UI_printGameWins(numWhiteWins, numBlackWins, numTieGames);
+
       if (UI_playAgain()) {
         if (!UI_promptToKeepSettings()) {
           if (UI_promptToChangeBoard()) {
@@ -113,7 +115,8 @@ int main(void) {
   }
 
   Graph_delete(board);
-  UI_printClosingScreen(numWhiteWins, numBlackWins, numTieGames);
+  UI_printClosingScreen();
+  UI_printGameWins(numWhiteWins, numBlackWins, numTieGames);
 
   return 0;
 }

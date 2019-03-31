@@ -16,6 +16,7 @@ int UI_promptToChangeBoard();
 int UI_promptToChangeGamemode(bool);
 int UI_promptToChangeDifficulty();
 int UI_promptToResetScore();
-void UI_printClosingScreen(int, int, int);
+void UI_printClosingScreen();
+void UI_printGameWins(int, int, int);
 void UI_printErrorColumnFull();
 void UI_printErrorMoveOutOfBounds(int);
