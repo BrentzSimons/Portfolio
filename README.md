@@ -10,8 +10,10 @@ Main Menu:
   -If you select AI, then you will enter the level of difficulty you want to AI to be. Enter 1 for easy, 2 for medium, and 3 for hard. All difficulties are beatable.
 
 Game:
+  -The turns will go back and forth between black and white.
   -If you are playing against the AI, you will be white and the AI is black.
-  -Enter which column you want to play and you piece will be placed and it'll be the next players turn.
+  -Enter which column you want to play and your piece will be placed and it'll be the next players turn.
+  -First player to get four in a row (diagonal, horizontal, or vertical) wins!
   -After each game, you are asked if you want to play again. Enter 1 to play again or 0 to end the game.
   -If you play again, whoever lost the last round will start.
-  -If you decide to end the game, you will be shown how many times black won, how many times white won, and how many times you tied. 
+  -If you decide to end the game, you will be shown how many times black won, how many times white won, and how many times you tied.
