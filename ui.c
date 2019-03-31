@@ -83,6 +83,64 @@ int UI_playAgain() {
   return input;
 }
 
+int UI_promptToKeepSettings() {
+  wprintf(L"Would you like to keep your current settings? (1 for yes, 0 for no) ");
+  int input;
+  while (scanf("%d", &input) != 1 || (input != 0 && input != 1)) {
+    wprintf(L"Please only enter 1 or 0: ");
+    while(getchar() != '\n');
+  }
+
+  return input;
+}
+
+int UI_promptToChangeBoard() {
+  wprintf(L"Would you like to change the board size? (1 for yes, 0 for no) ");
+  int input;
+  while (scanf("%d", &input) != 1 || (input != 0 && input != 1)) {
+    wprintf(L"Please only enter 1 or 0: ");
+    while(getchar() != '\n');
+  }
+
+  return input;
+}
+
+int UI_promptToChangeGamemode(bool gamemode) {
+  if (gamemode)
+    wprintf(L"Would you like to change to player vs computer? (1 for yes, 0 for no) ");
+  else
+    wprintf(L"Would you like to change to player vs player? (1 for yes, 0 for no) ");
+  int input;
+  while (scanf("%d", &input) != 1 || (input != 0 && input != 1)) {
+    wprintf(L"Please only enter 1 or 0: ");
+    while(getchar() != '\n');
+  }
+
+  return input;
+}
+
+int UI_promptToChangeDifficulty() {
+  wprintf(L"Would you like to change the difficulty? (1 for yes, 0 for no) ");
+  int input;
+  while (scanf("%d", &input) != 1 || (input != 0 && input != 1)) {
+    wprintf(L"Please only enter 1 or 0: ");
+    while(getchar() != '\n');
+  }
+
+  return input;
+}
+
+int UI_promptToResetScore() {
+  wprintf(L"Would you like to reset the score? (1 for yes, 0 for no) ");
+  int input;
+  while (scanf("%d", &input) != 1 || (input != 0 && input != 1)) {
+    wprintf(L"Please only enter 1 or 0: ");
+    while(getchar() != '\n');
+  }
+
+  return input;
+}
+
 void UI_printClosingScreen(int numRedWins, int numBlackWins, int numTieGames) {
   system("clear");
   wprintf(L"\nThank you for playing!\n\n");

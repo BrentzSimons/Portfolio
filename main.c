@@ -19,7 +19,7 @@ int main(void) {
   int move, win;
   int numWhiteWins = 0, numBlackWins = 0, numTieGames = 0;
 
-  if (UI_getGamemode() == 1) {
+  if (UI_getGamemode()) {
     gamemode = true;    // User is playing against another player
   } else {
     gamemode = false;   // User is playing against computer
@@ -61,19 +61,45 @@ int main(void) {
     Graph_print(board);
     win = Graph_checkForWin(board, move);
     if (win) {
-      if (win == 2) {
+      if (win == 2) { // Tie game
         UI_printWin('t');
         numTieGames++;
       } else {
-        if (turn) {
+        if (turn) {   // White wins
           UI_printWin(PLAYER_WHITE);
           numWhiteWins++;
-        } else {
+        } else {      // Black wins
           UI_printWin(PLAYER_BLACK);
           numBlackWins++;
         }
       }
+
       if (UI_playAgain()) {
+        if (!UI_promptToKeepSettings()) {
+          if (UI_promptToChangeBoard()) {
+            Graph_delete(board);
+            board = Graph_create(UI_getRows(), UI_getCols());
+          }
+          if (gamemode) {
+            if (UI_promptToChangeGamemode(gamemode)) {
+              gamemode = false;
+              difficulty = UI_getDifficulty();
+            }
+          } else {
+            if (UI_promptToChangeGamemode(gamemode)) {
+              gamemode = true;
+            } else {
+              if (UI_promptToChangeDifficulty()) {
+                difficulty = UI_getDifficulty();
+              }
+            }
+          }
+          if (UI_promptToResetScore()) {
+            numWhiteWins = 0;
+            numBlackWins = 0;
+            numTieGames = 0;
+          }
+        }
         win = 0;
         board = Graph_reset(board);
         Graph_print(board);
