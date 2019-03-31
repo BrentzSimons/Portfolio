@@ -1,5 +1,5 @@
 connectFour.exe: main.o graph.o ui.o AI.o
-	gcc main.o graph.o ui.o AI.o -o connectFour
+	gcc main.o graph.o ui.o AI.o -o connectFour -g
 main.o: main.c
 	gcc main.c -Wall -c
 graph.o: graph.c
@@ -14,3 +14,6 @@ clear:
 
 run:
 	./connectFour
+
+debug:
+	valgrind --tool=memcheck ./connectFour
