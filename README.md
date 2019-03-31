@@ -17,3 +17,8 @@ Game:
   -After each game, you are asked if you want to play again. Enter 1 to play again or 0 to end the game.
   -If you play again, whoever lost the last round will start.
   -If you decide to end the game, you will be shown how many times black won, how many times white won, and how many times you tied.
+
+Code Design:
+  -The easy AI mode selects a random column and plays in that column as long as it's not already full.
+  -The medium AI mode calculates a score for every column and picks the column with the best score. If all of the columns give the same score, it picks a random column.
+  -The hard AI mode uses the same scoring method as medium, but also uses the minimax with alpha-beta pruning algorithm to look at future moves and finds the best move. In order to keep runtime low, the depth for the minimax decreases (from 7 down to 2) as the amount of columns increase. 
