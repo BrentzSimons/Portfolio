@@ -201,45 +201,6 @@ int Graph_checkForWin(Graph* board, int move) {
     free(window);
   }
 
-  // for (int r = heighestRow; r < board->rows-3; r++) {
-  //   for (int c = 0; c < board->cols-3; c++) {
-  //     if (board->board[r][c] != ' ') {
-  //       if ((board->board[r][c] == board->board[r+1][c+1]) && (board->board[r+1][c+1] == board->board[r+2][c+2]) && (board->board[r+2][c+2] == board->board[r+3][c+3]))
-  //         return 1;
-  //     }
-  //   }
-  // }
-  //
-  // //checking up diagonal
-  // for (int r = heighestRow+3; r < board->rows; r++) {
-  //   for (int c = 0; c < board->cols-3; c++) {
-  //     if (board->board[r][c] != ' ') {
-  //       if ((board->board[r][c] == board->board[r-1][c+1]) && (board->board[r-1][c+1] == board->board[r-2][c+2]) && (board->board[r-2][c+2] == board->board[r-3][c+3]))
-  //         return 1;
-  //     }
-  //   }
-  // }
-  //
-  // //checking horizontal
-  // for (int r = heighestRow; r < board->rows; r++) {
-  //   for (int c = 0; c < board->cols-3; c++) {
-  //     if (board->board[r][c] != ' ') {
-  //       if ((board->board[r][c] == board->board[r][c+1]) && (board->board[r][c+1] == board->board[r][c+2]) && (board->board[r][c+2] == board->board[r][c+3]))
-  //         return 1;
-  //     }
-  //   }
-  // }
-  //
-  // //checking vertical
-  // for (int r = heighestRow; r < board->rows-3; r++) {
-  //   for (int c = 0; c < board->cols; c++) {
-  //     if (board->board[r][c] != ' ') {
-  //       if ((board->board[r][c] == board->board[r+1][c]) && (board->board[r+1][c] == board->board[r+2][c]) && (board->board[r+2][c] == board->board[r+3][c]))
-  //         return 1;
-  //     }
-  //   }
-  // }
-
   return 0;
 }
 

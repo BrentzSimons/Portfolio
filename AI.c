@@ -3,10 +3,9 @@
 int NEGATIVE_INFINITY = -2147483648;
 int POSITIVE_INFINITY = 2147483647;
 
-// Returns a random number from 0 to the amount of columns minus 1.
-// This is the easy mode for the AI.
+// Returns a random number from 0 to the amount of columns minus 1
 //
-// Parameter: needs the Graph pointer that holds the information of the board.
+// This is the easy mode for the AI.
 int AI_getRandomMove(Graph* board) {
   int move = rand() % board->cols;
   while (board->colCounter[move] < 0) // Checks if the column is already full
@@ -17,9 +16,8 @@ int AI_getRandomMove(Graph* board) {
 
 // Goes through all of the columns and calculates a score for each, then
 // returns the column with the heighest score.
-// This is the medium mode for the AI.
 //
-// Parameter: needs the Graph pointer that holds the information of the board.
+// This is the medium mode for the AI.
 int AI_getMove(Graph* board) {
   int bestScore = 0;
   int bestMove = AI_getRandomMove(board);   // Sets the initial best move as random incase all columns have the same score
@@ -42,9 +40,8 @@ int AI_getMove(Graph* board) {
 // Calls the minimax algorithm to get the best move. Changes the depth for minimax based on
 // the amount of columns in the board to lower runtime on bigger boards, but get better
 // results on smaller boards.
-// This is the hard mode for the AI.
 //
-// Parameter: needs the Graph pointer that holds the information of the board.
+// This is the hard mode for the AI.
 int AI_getBestMove(Graph* board) {
   Score_Column bestMove;
   if (board->cols < 20)
@@ -66,9 +63,7 @@ int AI_getBestMove(Graph* board) {
 // Uses the minimax algorithm with alpha-beta pruning to recursively go through all of the possible moves
 // and calculates a score.The stop condition happens when the depth reaches 0 or if there is a win.
 //
-// Parameters: needs the Graph pointer that holds the information of the board.
-// A positive integer for the depth. A boolean that keeps track if you are on the player
-// that was the max score. A integer
+// Used the minimax with alpha-beta bruning pseudocode from https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning#Pseudocode
 Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move, int alpha, int beta) {
   Score_Column bestMove;
   // If move is -1, minimax was just called from another function and will cause problems if checkForWin is called.
@@ -135,6 +130,7 @@ Score_Column AI_minimax(Graph* board, int depth, bool maximizingPlayer, int move
   }
 }
 
+// Calculates and returns the total score for "move"
 int AI_calcMoveScore(Graph* board, int move, bool turn) {
   // Calculates the lower/upper column/row from the move
   int lowerCol = move-3, upperCol = move+3;
@@ -175,6 +171,7 @@ int AI_calcMoveScore(Graph* board, int move, bool turn) {
   return score;
 }
 
+// Finds the horizontal score
 int AI_getScoreHorizontal(Graph* board, int move, int lowerCol, int upperCol, int lowerRow, int upperRow, wchar_t currPlayer, wchar_t oppPlayer) {
   int score = 0;
 
@@ -232,6 +229,7 @@ int AI_getScoreHorizontal(Graph* board, int move, int lowerCol, int upperCol, in
   return score;
 }
 
+// Finds the verital score
 int AI_getScoreVertical(Graph* board, int move, int lowerCol, int upperCol, int lowerRow, int upperRow, wchar_t currPlayer, wchar_t oppPlayer) {
   int score = 0;
 
@@ -290,6 +288,7 @@ int AI_getScoreVertical(Graph* board, int move, int lowerCol, int upperCol, int 
   return score;
 }
 
+// Finds the diagonal up score (bottom left to top right)
 int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, int lowerRow, int upperRow, wchar_t currPlayer, wchar_t oppPlayer) {
   int score = 0;
 
@@ -374,6 +373,7 @@ int AI_getScoreDiagonalUp(Graph* board, int move, int lowerCol, int upperCol, in
   return score;
 }
 
+// Finds the diagonal down score (top left to bottom right)
 int AI_getScoreDiagonalDown(Graph* board, int move, int lowerCol, int upperCol, int lowerRow, int upperRow, wchar_t currPlayer, wchar_t oppPlayer) {
   int score = 0;
 
